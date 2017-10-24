@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         treeBar - 前端博客目录大纲导航
+// @name         TreeBar - 前端博客目录大纲导航
 // @namespace    https://github.com/zhilidali/
 // @version      0.1
 // @description  显示文章目录导航
