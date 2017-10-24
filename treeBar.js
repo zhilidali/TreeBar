@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         TreeBar - 前端博客目录大纲导航
+// @name         TreeBar
 // @namespace    https://github.com/zhilidali/
-// @version      0.1
-// @description  显示文章目录导航
+// @version      0.1.1
+// @description  目录树导航条 - 显示文章目录大纲导航
 // @author       zhilidali
 // @match        http://www.jianshu.com/p/*
 // @match        http*://juejin.im/post/*
@@ -16,20 +16,21 @@
 		jianshu: {
 			tagName: '.show-content',
 			style: `
-				.zhilidali {
+				.treeBar {
 					top: 60px;
 					right: 0;
 					border-color: #ea6f5a;
 				}
-				.zhilidali-btn {
+				.treeBar-btn {
+					padding: .2em 1em;
 					border-color: #ea6f5a;
 					background-color: #ea6f5a;
 					color: #fff;
 				}
-				.zhilidali > ul > li a {
+				.treeBar > ul > li a {
 					color: #ea6f5a;
 				}
-				.zhilidali > ul > li a:hover {
+				.treeBar > ul > li a:hover {
 					color: rgb(236, 97, 73);
 				}
 			`
@@ -37,19 +38,20 @@
 		juejin: {
 			tagName: '.post-content-container',
 			style: `
-				.zhilidali {
+				.treeBar {
 					top: 60px;
 					right: 0;
 				}
-				.zhilidali-btn {
+				.treeBar-btn {
+					padding: .5em 1.5em;
 					border-color: rgba(3, 113, 233, 1);
 					background-color: rgba(3, 113, 233, 1);
 					color: #fff;
 				}
-				.zhilidali > ul > li a {
+				.treeBar > ul > li a {
 					color: rgba(20, 20, 20, .8);
 				}
-				.zhilidali > ul > li a:hover {
+				.treeBar > ul > li a:hover {
 					color: rgba(20, 20, 20, 1);
 				}
 			`
@@ -57,29 +59,30 @@
 		default: {
 			tagName: 'body',
 			style: `
-				.zhilidali {
+				.treeBar {
 					top: 10%;
 					right: 1%;
 					border-color: #555;
 				}
-				.zhilidali-btn {
+				.treeBar-btn {
+					padding: .3em 1.2em;
 					background-color: #fff;
 					color: #000;
 				}
-				.zhilidali > ul > li a {
+				.treeBar > ul > li a {
 					color: #0366d6;
 				}
 			`
 		}
 	};
-	window.zhilidali = {
+	var treeBar = window.treeBar = {
 		site: {
 			name: '',
 			tagName: '',
 		},
-		className: `zhilidali`,
+		className: `treeBar`,
 		style: `
-				.zhilidali {
+				.treeBar {
 					position: fixed;
 					max-width: 300px;
 					max-height: 90%;
@@ -88,9 +91,8 @@
 					border: 1px solid #ddd;
 					background-color: rgba(255, 255, 255, .9);
 				}
-				.zhilidali-btn {
+				.treeBar-btn {
 					display: inline-block;
-					padding: .3em 1.2em;
 					border: 1px solid #333;
 					border-radius: 3px;
 					text-align: center;
@@ -98,11 +100,11 @@
 					outline: none;
 					cursor: pointer;
 				}
-				.zhilidali ul {
+				.treeBar ul {
 					padding-left: 1em;
 					margin: 0;
 				}
-				.zhilidali > ul > li a {
+				.treeBar > ul > li a {
 					line-height: 30px;
 					/*overflow: hidden;
 					white-space: nowrap;
@@ -111,38 +113,59 @@
 					font-size: 14px;
 					cursor: pointer;
 				}
-				.zhilidali > ul > li a:hover {
+				.treeBar > ul > li a:hover {
 					text-decoration: underline;
 				}`,
-		innerDom: `<div><button class="zhilidali-btn">Toggle</button></div>`
-	};
-
-	window.onload = function() {
-		// 0. 匹配站点
-		matchSite();
-		// 1. 获取DOM
-		var wrap = document.querySelector(zhilidali.site.tagName),
-			hList = wrap.querySelectorAll('h1, h2, h3, h4, h5, h6');
-		// 2. 构建数据
-		var tree = transformTree(Array.from(hList));
-		// 3. 构建DOM
-		createDom(zhilidali, tree);
-		// 4. 定义事件
-		document.querySelector('.zhilidali-btn').onclick = function () {
-			var ul = document.querySelector('.zhilidali > ul');
-			ul.style.display = ul.style.display === 'none' ? 'block' : 'none';
-		};
-		console.log('zhilidali');
+		innerDom: `<div><button class="treeBar-btn">Toggle</button></div>`,
 	};
 
 	/* 匹配站点 */
-	function matchSite() {
+	treeBar.matchSite = function() {
 		var domain = location.href.match(/([\d\w]+)\.(com|cn|im)/i);
-		zhilidali.site.name = (domain && domain[1]) || 'default';
-		var siteInfo = map[zhilidali.site.name];
-		zhilidali.site.tagName = siteInfo.tagName;
-		zhilidali.style += siteInfo.style;
-	}
+		this.site.name = (domain && domain[1]) || 'default';
+		var siteInfo = map[this.site.name];
+		this.site.tagName = siteInfo.tagName;
+		this.style += siteInfo.style;
+	};
+
+	/* 创建DOM */
+	treeBar.createDom = function() {
+		var style = document.createElement('style'),
+			dom = document.createElement('div');
+		style.innerHTML = this.style;
+		document.head.appendChild(style);
+		dom.className = this.className;
+		dom.innerHTML = this.innerDom + this.ul;
+		document.body.appendChild(dom);
+	};
+
+	treeBar.onEvent = function() {
+		document.querySelector('.treeBar-btn').onclick = function () {
+			var ul = document.querySelector('.treeBar > ul');
+			ul.style.display = ul.style.display === 'none' ? 'block' : 'none';
+		};
+	};
+
+	document.onreadystatechange = function () {
+		if (document.readyState === "complete") {
+			console.time('TreeBar');
+
+			// 0. 匹配站点
+			treeBar.matchSite();
+			// 1. 获取DOM
+			var hList = document.querySelector(treeBar.site.tagName)
+						.querySelectorAll('h1, h2, h3, h4, h5, h6');
+			// 2. 构建数据
+			var tree = transformTree(Array.from(hList));
+			// 3. 构建DOM
+			treeBar.ul = compileList(tree);
+			treeBar.createDom();
+			// 4. 注册事件
+			treeBar.onEvent();
+
+			console.timeEnd('TreeBar');
+		}
+	};
 
 	/* 解析DOM，构建树形数据 */
 	function transformTree(list) {
@@ -167,6 +190,7 @@
 
 		// 转为树形结构后的数据改造
 		function construct(arr, obj) {
+			obj.id += obj.innerText;
 			arr.push({
 				name: obj.innerText,
 				id: obj.innerText,
@@ -175,17 +199,6 @@
 		}
 
 		return result;
-	}
-
-	/* 创建DOM */
-	function createDom(zhilidali, tree) {
-		var style = document.createElement('style'),
-			dom = document.createElement('div');
-		style.innerHTML = zhilidali.style;
-		document.head.appendChild(style);
-		dom.className = zhilidali.className;
-		dom.innerHTML = zhilidali.innerDom + compileList(tree);
-		document.body.appendChild(dom);
 	}
 
 	/* 根据数据构建目录 */
