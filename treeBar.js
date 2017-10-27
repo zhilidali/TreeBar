@@ -4,6 +4,7 @@
 // @namespace    https://github.com/zhilidali/TreeBar/
 // @version      0.1.2
 // @description  目录树导航 - 显示文章目录大纲导航
+// @description:zh-cn    目录树导航 - 显示文章目录大纲导航
 // @author       zhilidali
 // @mail         zhilidali@qq.com
 // @license      MIT Licensed
