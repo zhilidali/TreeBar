@@ -1,11 +1,17 @@
 // ==UserScript==
 // @name         TreeBar
-// @namespace    https://github.com/zhilidali/
+// @name:zh-CN   目录树导航
+// @namespace    https://github.com/zhilidali/TreeBar/
 // @version      0.1.1
-// @description  目录树导航条 - 显示文章目录大纲导航
+// @description  目录树导航 - 显示文章目录大纲导航
 // @author       zhilidali
+// @mail         zhilidali@qq.com
+// @license      MIT Licensed
+// @match        http*://*
 // @match        http://www.jianshu.com/p/*
 // @match        http*://juejin.im/post/*
+// @match        http*://sspai.com/*
+// @match        http*://zhuanlan.zhihu.com/p/*
 // @grant        none
 // ==/UserScript==
 
@@ -15,64 +21,25 @@
 	var map = {
 		jianshu: {
 			tagName: '.show-content',
-			style: `
-				.treeBar {
-					top: 60px;
-					right: 0;
-					border-color: #ea6f5a;
-				}
-				.treeBar-btn {
-					padding: .2em 1em;
-					border-color: #ea6f5a;
-					background-color: #ea6f5a;
-					color: #fff;
-				}
-				.treeBar > ul > li a {
-					color: #ea6f5a;
-				}
-				.treeBar > ul > li a:hover {
-					color: rgb(236, 97, 73);
-				}
-			`
+			sync: true,
+			style: {
+				top: '55px',
+				color: '#ea6f5a',
+			}
+		},
+		zhihu: {
+			tagName: '.PostIndex-content',
+			sync: true,
+		},
+		sspai: {
+			tagName: '#article-content',
+			sync: true,
 		},
 		juejin: {
 			tagName: '.post-content-container',
-			style: `
-				.treeBar {
-					top: 60px;
-					right: 0;
-				}
-				.treeBar-btn {
-					padding: .5em 1.5em;
-					border-color: rgba(3, 113, 233, 1);
-					background-color: rgba(3, 113, 233, 1);
-					color: #fff;
-				}
-				.treeBar > ul > li a {
-					color: rgba(20, 20, 20, .8);
-				}
-				.treeBar > ul > li a:hover {
-					color: rgba(20, 20, 20, 1);
-				}
-			`
 		},
 		default: {
-			tagName: 'body',
-			style: `
-				.treeBar {
-					top: 10%;
-					right: 1%;
-					border-color: #555;
-				}
-				.treeBar-btn {
-					padding: .3em 1.2em;
-					background-color: #fff;
-					color: #000;
-				}
-				.treeBar > ul > li a {
-					color: #0366d6;
-				}
-			`
+			tagName: 'body'
 		}
 	};
 	var treeBar = window.treeBar = {
@@ -83,7 +50,10 @@
 		className: `treeBar`,
 		style: `
 				.treeBar {
+					z-index: 99999;
 					position: fixed;
+					top: 10%;
+					right: 0;
 					max-width: 300px;
 					max-height: 90%;
 					overflow-y: auto;
@@ -91,18 +61,43 @@
 					border: 1px solid #ddd;
 					background-color: rgba(255, 255, 255, .9);
 				}
+				.treeBar-resize {
+					position: absolute;
+					// cursor: col-resize;
+					width: 5px;
+					left: -2px;
+					top: 0;
+					bottom: 0;
+				}
 				.treeBar-btn {
 					display: inline-block;
-					border: 1px solid #333;
+					width: 72px;
+					height: 28px;
+					padding: 0;
+					box-sizing: border-box;
+					border: 1px solid #ddd;
 					border-radius: 3px;
-					text-align: center;
+					box-shadow: 0 1px 1px 1px #ddd;
+					font-size: 14px;
+					background-color: #fff;
 					vertical-align: middle;
+					text-align: center;
 					outline: none;
 					cursor: pointer;
+					color: #333;
 				}
 				.treeBar ul {
 					padding-left: 1em;
 					margin: 0;
+				}
+				.treeBar > ul > li {
+				    list-style-type: disc;
+				}
+				.treeBar > ul > li > ul > li {
+				    list-style-type: circle;
+				}
+				.treeBar > ul > li > ul > li > ul > li {
+				    list-style-type: square;
 				}
 				.treeBar > ul > li a {
 					line-height: 30px;
@@ -112,46 +107,75 @@
 					text-decoration: none;
 					font-size: 14px;
 					cursor: pointer;
+					color: #0371e9;
 				}
 				.treeBar > ul > li a:hover {
 					text-decoration: underline;
 				}`,
-		innerDom: `<div><button class="treeBar-btn">Toggle</button></div>`,
-	};
-
-	/* 匹配站点 */
-	treeBar.matchSite = function() {
-		var domain = location.href.match(/([\d\w]+)\.(com|cn|im)/i);
-		this.site.name = (domain && domain[1]) || 'default';
-		var siteInfo = map[this.site.name];
-		this.site.tagName = siteInfo.tagName;
-		this.style += siteInfo.style;
-	};
-
-	/* 创建DOM */
-	treeBar.createDom = function() {
-		var style = document.createElement('style'),
-			dom = document.createElement('div');
-		style.innerHTML = this.style;
-		document.head.appendChild(style);
-		dom.className = this.className;
-		dom.innerHTML = this.innerDom + this.ul;
-		document.body.appendChild(dom);
-	};
-
-	treeBar.onEvent = function() {
-		document.querySelector('.treeBar-btn').onclick = function () {
-			var ul = document.querySelector('.treeBar > ul');
-			ul.style.display = ul.style.display === 'none' ? 'block' : 'none';
-		};
-	};
-
-	document.onreadystatechange = function () {
-		if (document.readyState === "complete") {
+		innerDom: `<div><button class="treeBar-btn">TreeBar</button><div class="treeBar-resize"></div></div>`,
+		matchSite: function() {/* 匹配站点 */
+			var domain = location.href.match(/([\d\w]+)\.(com|cn|im)/i);
+			this.site.name = (domain && domain[1]);
+			var siteInfo = map[this.site.name] || map.default;
+			this.site.tagName = siteInfo.tagName;
+			this.site.sync = siteInfo.sync || false;
+			if (siteInfo.style) {
+				this.style += `
+					.treeBar {
+						top: ${siteInfo.style.top};
+						border-color: ${siteInfo.style.color};
+					}
+					.treeBar-btn {
+						border-color: ${siteInfo.style.color};
+						background-color: ${siteInfo.style.color};
+						color: #fff;
+					}
+					.treeBar > ul > li a {
+						color: ${siteInfo.style.color};
+					}
+				`;
+			}
+		},
+		createDom: function() {/* 创建DOM */
+			var style = document.createElement('style'),
+				dom = document.createElement('div');
+			style.innerHTML = this.style;
+			document.head.appendChild(style);
+			dom.className = this.className;
+			dom.innerHTML = this.innerDom + this.ul;
+			document.body.appendChild(dom);
+		},
+		onEvent: function() {
+			document.querySelector('.treeBar-btn').onclick = function () {
+				var ul = document.querySelector('.treeBar > ul');
+				ul.style.display = ul.style.display === 'none' ? 'block' : 'none';
+			};
+			/*var resize = {};
+			document.body.onmouseup = function() {
+				console.log('up');
+				resize.flag = false;
+			};
+			document.querySelector('.treeBar-resize').onmousedown = function() {
+				resize.flag = true;
+			};
+			document.body.onmousemove = function() {
+				if (!resize.flag) return;
+				var tree = document.querySelector('.treeBar');
+				if (resize.current === undefined) {
+					resize.current = event.x;
+					return;
+				}
+				var x = event.x - resize.current;
+				if(Math.abs(x) >= 10) {
+					tree.style.width = tree.offsetWidth - x + 'px';
+					console.log(x);
+					resize.current = event.x;
+				}
+			};*/
+		},
+		init: function() {
 			console.time('TreeBar');
 
-			// 0. 匹配站点
-			treeBar.matchSite();
 			// 1. 获取DOM
 			var hList = document.querySelector(treeBar.site.tagName)
 						.querySelectorAll('h1, h2, h3, h4, h5, h6');
@@ -166,6 +190,17 @@
 			console.timeEnd('TreeBar');
 		}
 	};
+
+	// 0. 匹配站点
+	treeBar.matchSite();
+	if (treeBar.site.sync) {
+		treeBar.init();
+	} else {
+		document.onreadystatechange = function () {
+			document.readyState === "complete" && treeBar.init();
+		};
+	}
+
 
 	/* 解析DOM，构建树形数据 */
 	function transformTree(list) {
@@ -190,10 +225,9 @@
 
 		// 转为树形结构后的数据改造
 		function construct(arr, obj) {
-			obj.id += obj.innerText;
 			arr.push({
 				name: obj.innerText,
-				id: obj.innerText,
+				id: obj.id = obj.innerText,
 				tagName: obj.tagName
 			});
 		}
