@@ -2,16 +2,20 @@
 // @name         TreeBar
 // @name:zh-CN   目录树导航
 // @namespace    https://github.com/zhilidali/TreeBar/
-// @version      0.1.2
+// @version      0.1.3
 // @description  目录树导航 - 显示文章目录大纲导航
 // @description:zh-cn    目录树导航 - 显示文章目录大纲导航
 // @author       zhilidali
 // @mail         zhilidali@qq.com
 // @license      MIT Licensed
-// @match        http://www.jianshu.com/p/*
+// @match        http*://www.jianshu.com/p/*
 // @match        http*://juejin.im/post/*
 // @match        http*://sspai.com/*
 // @match        http*://zhuanlan.zhihu.com/p/*
+// @match        http*://mp.weixin.qq.com/s?*
+// @match        http*://cnodejs.org/topic/*
+// @match        http*://div.io/topic/*
+// @match        http*://www.zcfy.cc/article/*
 // @grant        none
 // ==/UserScript==
 
@@ -38,6 +42,12 @@
 		juejin: {
 			tagName: '.post-content-container',
 		},
+		div: {
+			tagName: '.topic-firstfloor-detail'
+		},
+		zcfy: {
+			tagName: '.markdown-html'
+		},
 		default: {
 			tagName: 'body'
 		}
@@ -54,10 +64,10 @@
 					position: fixed;
 					top: 10%;
 					right: 0;
+					bottom: 10px;
 					max-width: 300px;
 					max-height: 90%;
-					overflow-y: auto;
-					padding: 10px;
+					overflow: visible;
 					border: 1px solid #ddd;
 					background-color: rgba(255, 255, 255, .9);
 				}
@@ -70,7 +80,9 @@
 					bottom: 0;
 				}
 				.treeBar-btn {
-					display: inline-block;
+					position: absolute;
+					top: -1px;
+					left: -1px;
 					width: 72px;
 					height: 28px;
 					padding: 0;
@@ -87,8 +99,15 @@
 					color: #333;
 				}
 				.treeBar ul {
-					padding-left: 1em;
+					padding-left: 1.1em;
 					margin: 0;
+				}
+				.treeBar > ul {
+				    box-sizing: border-box;
+					height: 100%;
+					margin-left: 10px;
+					overflow-y: auto;
+					padding-top: 30px;
 				}
 				.treeBar > ul > li {
 				    list-style-type: disc;
@@ -114,7 +133,7 @@
 				}`,
 		innerDom: `<div><button class="treeBar-btn">TreeBar</button><div class="treeBar-resize"></div></div>`,
 		matchSite: function() {/* 匹配站点 */
-			var domain = location.href.match(/([\d\w]+)\.(com|cn|im)/i);
+			var domain = location.href.match(/([\d\w]+)\.(com|cn|net|org|im|io|cc)/i);
 			this.site.name = (domain && domain[1]);
 			var siteInfo = map[this.site.name] || map.default;
 			this.site.tagName = siteInfo.tagName;
@@ -149,6 +168,11 @@
 			document.querySelector('.treeBar-btn').onclick = function () {
 				var ul = document.querySelector('.treeBar > ul');
 				ul.style.display = ul.style.display === 'none' ? 'block' : 'none';
+				var position = {
+					none: '-71px',
+					block: '-1px'
+				};
+				this.style.left = position[ul.style.display];
 			};
 			/*var resize = {};
 			document.body.onmouseup = function() {
