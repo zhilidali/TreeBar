@@ -46,7 +46,12 @@
 			tagName: '.topic-firstfloor-detail'
 		},
 		zcfy: {
-			tagName: '.markdown-html'
+			tagName: '.markdown-html',
+			sync: true
+		},
+		qq: {
+			tagName: '.rich_media_content',
+			sync: true
 		},
 		default: {
 			tagName: 'body'
@@ -64,9 +69,8 @@
 					position: fixed;
 					top: 10%;
 					right: 0;
-					bottom: 10px;
 					max-width: 300px;
-					max-height: 90%;
+					max-height: 88%;
 					overflow: visible;
 					border: 1px solid #ddd;
 					background-color: rgba(255, 255, 255, .9);
@@ -108,6 +112,7 @@
 					margin-left: 10px;
 					overflow-y: auto;
 					padding-top: 30px;
+					padding-right: 10px;
 				}
 				.treeBar > ul > li {
 				    list-style-type: disc;
