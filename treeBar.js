@@ -62,81 +62,43 @@
 			name: '',
 			tagName: '',
 		},
-		className: `treeBar`,
+		className: 'treeBar',
 		style: `
-				.treeBar {
-					z-index: 99999;
-					position: fixed;
-					top: 10%;
-					right: 0;
-					max-width: 300px;
-					max-height: 88%;
-					overflow: visible;
-					border: 1px solid #ddd;
-					background-color: rgba(255, 255, 255, .9);
-				}
-				.treeBar-resize {
-					position: absolute;
-					// cursor: col-resize;
-					width: 5px;
-					left: -2px;
-					top: 0;
-					bottom: 0;
-				}
-				.treeBar-btn {
-					position: absolute;
-					top: -1px;
-					left: -1px;
-					width: 72px;
-					height: 28px;
-					padding: 0;
-					box-sizing: border-box;
-					border: 1px solid #ddd;
-					border-radius: 3px;
-					box-shadow: 0 1px 1px 1px #ddd;
-					font-size: 14px;
-					background-color: #fff;
-					vertical-align: middle;
-					text-align: center;
-					outline: none;
-					cursor: pointer;
-					color: #333;
-				}
-				.treeBar ul {
-					padding-left: 1.1em;
-					margin: 0;
-				}
-				.treeBar > ul {
-				    box-sizing: border-box;
-					height: 100%;
-					margin-left: 10px;
-					overflow-y: auto;
-					padding-top: 30px;
-					padding-right: 10px;
-				}
-				.treeBar > ul > li {
-				    list-style-type: disc;
-				}
-				.treeBar > ul > li > ul > li {
-				    list-style-type: circle;
-				}
-				.treeBar > ul > li > ul > li > ul > li {
-				    list-style-type: square;
-				}
-				.treeBar > ul > li a {
-					line-height: 30px;
-					/*overflow: hidden;
-					white-space: nowrap;
-					text-overflow: ellipsis;*/
-					text-decoration: none;
-					font-size: 14px;
-					cursor: pointer;
-					color: #0371e9;
-				}
-				.treeBar > ul > li a:hover {
-					text-decoration: underline;
-				}`,
-		innerDom: `<div><button class="treeBar-btn">TreeBar</button><div class="treeBar-resize"></div></div>`,
+				/* 样式重置 */
+					.treeBar ul {padding-left: 1.1em; margin: 0; }
+					.treeBar > ul > li {list-style-type: disc; }
+					.treeBar > ul > li > ul > li {list-style-type: circle; }
+					.treeBar > ul > li > ul > li > ul > li {list-style-type: square; }
+				/* common */
+					.treeBar {
+						z-index: 99999; position: fixed; top: 10%; right: 0; max-width: 300px; max-height: 88%;
+						border: 1px solid #ddd; overflow-y: auto; overflow-x: visible; background-color: rgba(255, 255, 255, .9);
+					}
+					.treeBar-resize {
+						position: absolute; /*cursor: col-resize;*/ width: 5px; left: -2px; top: 0; bottom: 0;
+					}
+					.treeBar-btn {
+						box-sizing: border-box; position: absolute; top: -1px; left: -1px; width: 72px;
+						height: 28px;border: 1px solid #ddd; border-radius: 3px; box-shadow: 0 1px 1px 1px #ddd;
+						font-size: 14px; background-color: #fff; vertical-align: middle; text-align: center;
+						outline: none; cursor: pointer; color: #333;
+					}
+					.treeBar > ul {
+						padding:  30px 10px 10px;
+					}
+					.treeBar > ul > li a {
+						line-height: 30px; /*overflow: hidden; white-space: nowrap; text-overflow: ellipsis;*/
+						text-decoration: none; font-size: 14px; cursor: pointer; color: #0371e9;
+					}
+					.treeBar > ul > li a:hover {
+						text-decoration: underline;
+					}
+				/* slideToggle */
+					.treeBar-slide {overflow-y: visible; }
+					.treeBar-slide .treeBar-btn {left: -71px; top: -1px; }
+					.treeBar-slide > ul {display: none; }
+				`,
+		innerDom: `<button class="treeBar-btn">TreeBar</button><div class="treeBar-resize"></div>`,
 		matchSite: function() {/* 匹配站点 */
 			var domain = location.href.match(/([\d\w]+)\.(com|cn|net|org|im|io|cc)/i);
 			this.site.name = (domain && domain[1]);
@@ -170,26 +132,22 @@
 			document.body.appendChild(dom);
 		},
 		onEvent: function() {
-			document.querySelector('.treeBar-btn').onclick = function () {
-				var ul = document.querySelector('.treeBar > ul');
-				ul.style.display = ul.style.display === 'none' ? 'block' : 'none';
-				var position = {
-					none: '-71px',
-					block: '-1px'
-				};
-				this.style.left = position[ul.style.display];
+			var eTree = document.querySelector('.treeBar'),
+				eBtn = document.querySelector('.treeBar-btn'),
+				eResize = document.querySelector('.treeBar-resize');
+			eBtn.onclick = function () {
+				eTree.classList.toggle('treeBar-slide');
 			};
 			/*var resize = {};
 			document.body.onmouseup = function() {
 				console.log('up');
 				resize.flag = false;
 			};
-			document.querySelector('.treeBar-resize').onmousedown = function() {
+			eResize.onmousedown = function() {
 				resize.flag = true;
 			};
 			document.body.onmousemove = function() {
 				if (!resize.flag) return;
-				var tree = document.querySelector('.treeBar');
 				if (resize.current === undefined) {
 					resize.current = event.x;
 					return;
