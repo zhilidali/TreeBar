@@ -2,7 +2,7 @@
 // @name         TreeBar
 // @name:zh-CN   目录树导航
 // @namespace    https://github.com/zhilidali/TreeBar/
-// @version      0.1.3
+// @version      0.1.4
 // @description  目录树导航 - 显示文章目录大纲导航
 // @description:zh-cn    目录树导航 - 显示文章目录大纲导航
 // @author       zhilidali
@@ -25,7 +25,6 @@
 	var map = {
 		jianshu: {
 			tagName: '.show-content',
-			sync: true,
 			style: {
 				top: '55px',
 				color: '#ea6f5a',
@@ -33,11 +32,9 @@
 		},
 		zhihu: {
 			tagName: '.PostIndex-content',
-			sync: true,
 		},
 		sspai: {
 			tagName: '#article-content',
-			sync: true,
 		},
 		juejin: {
 			tagName: '.post-content-container',
@@ -47,11 +44,9 @@
 		},
 		zcfy: {
 			tagName: '.markdown-html',
-			sync: true
 		},
 		qq: {
 			tagName: '.rich_media_content',
-			sync: true
 		},
 		default: {
 			tagName: 'body'
@@ -78,13 +73,13 @@
 						position: absolute; /*cursor: col-resize;*/ width: 5px; left: -2px; top: 0; bottom: 0;
 					}
 					.treeBar-btn {
-						box-sizing: border-box; position: absolute; top: -1px; left: -1px; width: 72px;
-						height: 28px;border: 1px solid #ddd; border-radius: 3px; box-shadow: 0 1px 1px 1px #ddd;
+						box-sizing: border-box; position: absolute; top: -1px; left: -1px; width: 72px; height: 28px;
+						padding: 0; border: 1px solid #ddd; border-radius: 3px; box-shadow: 0 1px 1px 1px #ddd;
 						font-size: 14px; background-color: #fff; vertical-align: middle; text-align: center;
 						outline: none; cursor: pointer; color: #333;
 					}
 					.treeBar > ul {
-						padding:  30px 10px 10px;
+						padding: 30px 10px 10px 25px;
 					}
 					.treeBar > ul > li a {
 						line-height: 30px; /*overflow: hidden; white-space: nowrap; text-overflow: ellipsis;*/
@@ -180,7 +175,7 @@
 
 	// 0. 匹配站点
 	treeBar.matchSite();
-	if (treeBar.site.sync) {
+	if (treeBar.site.tagName !== 'body' && document.querySelector(treeBar.site.tagName)) {
 		treeBar.init();
 	} else {
 		document.onreadystatechange = function () {
