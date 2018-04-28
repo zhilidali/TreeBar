@@ -37,7 +37,7 @@
 			tagName: '#article-content',
 		},
 		juejin: {
-			tagName: '.post-content-container',
+			tagName: '.article-content',
 		},
 		div: {
 			tagName: '.topic-firstfloor-detail'
