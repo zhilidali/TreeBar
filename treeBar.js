@@ -43,7 +43,7 @@
 			tagName: '.topic-firstfloor-detail'
 		},
 		zcfy: {
-			tagName: '.markdown-html',
+			tagName: '.markdown-body',
 		},
 		qq: {
 			tagName: '.rich_media_content',
