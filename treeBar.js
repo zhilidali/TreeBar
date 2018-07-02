@@ -2,7 +2,7 @@
 // @name         TreeBar
 // @name:zh-CN   目录树导航
 // @namespace    https://github.com/zhilidali/TreeBar/
-// @version      0.1.6
+// @version      0.1.7
 // @description  目录树导航 - 显示文章目录大纲导航
 // @description:zh-cn    目录树导航 - 显示文章目录大纲导航
 // @author       zhilidali
@@ -10,6 +10,7 @@
 // @license      MIT Licensed
 // @match        http*://www.jianshu.com/p/*
 // @match        http*://juejin.im/post/*
+// @match        http*://juejin.im/entry/*
 // @match        http*://sspai.com/*
 // @match        http*://zhuanlan.zhihu.com/p/*
 // @match        http*://mp.weixin.qq.com/s?*
