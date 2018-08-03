@@ -2,13 +2,14 @@
 // @name         TreeBar
 // @name:zh-CN   目录树导航
 // @namespace    https://github.com/zhilidali/TreeBar/
-// @version      0.1.7
+// @version      0.1.8
 // @description  目录树导航 - 显示文章目录大纲导航
 // @description:zh-cn    目录树导航 - 显示文章目录大纲导航
 // @author       zhilidali
 // @mail         zhilidali@qq.com
 // @license      MIT Licensed
 // @match        http*://www.jianshu.com/p/*
+// @match        http*://cdn2.jianshu.io/p/*
 // @match        http*://juejin.im/post/*
 // @match        http*://juejin.im/entry/*
 // @match        http*://sspai.com/*
@@ -32,7 +33,7 @@
 			}
 		},
 		zhihu: {
-			tagName: '.PostIndex-content',
+			tagName: '.Post-RichText',
 		},
 		sspai: {
 			tagName: '#article-content',
