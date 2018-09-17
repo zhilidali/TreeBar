@@ -2,7 +2,7 @@
 // @name         TreeBar
 // @name:zh-CN   目录树导航
 // @namespace    https://github.com/zhilidali/TreeBar/
-// @version      0.1.8
+// @version      0.1.9
 // @description  目录树导航 - 显示文章目录大纲导航
 // @description:zh-cn    目录树导航 - 显示文章目录大纲导航
 // @author       zhilidali
@@ -61,40 +61,40 @@
 		},
 		className: 'treeBar',
 		style: `
-				/* 样式重置 */
-					.treeBar ul {padding-left: 1.1em; margin: 0; }
-					.treeBar > ul > li {list-style-type: disc; }
-					.treeBar > ul > li > ul > li {list-style-type: circle; }
-					.treeBar > ul > li > ul > li > ul > li {list-style-type: square; }
-				/* common */
-					.treeBar {
-						z-index: 99999; position: fixed; top: 10%; right: 0; max-width: 300px; max-height: 88%;
-						border: 1px solid #ddd; overflow-y: auto; overflow-x: visible; background-color: rgba(255, 255, 255, .9);
-					}
-					.treeBar-resize {
-						position: absolute; /*cursor: col-resize;*/ width: 5px; left: -2px; top: 0; bottom: 0;
-					}
-					.treeBar-btn {
-						box-sizing: border-box; position: absolute; top: -1px; left: -1px; width: 72px; height: 28px;
-						padding: 0; border: 1px solid #ddd; border-radius: 3px; box-shadow: 0 1px 1px 1px #ddd;
-						font-size: 14px; background-color: #fff; vertical-align: middle; text-align: center;
-						outline: none; cursor: pointer; color: #333;
-					}
-					.treeBar > ul {
-						padding: 30px 10px 10px 25px;
-					}
-					.treeBar > ul > li a {
-						line-height: 30px; /*overflow: hidden; white-space: nowrap; text-overflow: ellipsis;*/
-						text-decoration: none; font-size: 14px; cursor: pointer; color: #0371e9;
-					}
-					.treeBar > ul > li a:hover {
-						text-decoration: underline;
-					}
-				/* slideToggle */
-					.treeBar-slide {overflow-y: visible; }
-					.treeBar-slide .treeBar-btn {left: -71px; top: -1px; }
-					.treeBar-slide > ul {display: none; }
-				`,
+			/* 样式重置 */
+				html { scroll-behavior: smooth; }
+				.treeBar ul { padding-left: 1.1em; margin: 0; }
+				.treeBar > ul > li { list-style-type: disc; }
+				.treeBar > ul > li > ul > li { list-style-type: circle; }
+				.treeBar > ul > li > ul > li > ul > li { list-style-type: square; }
+			/* common */
+				.treeBar {
+					z-index: 99999; position: fixed; top: 10%; right: 0; max-width: 300px; max-height: 88%;
+					border: 1px solid #ddd; overflow-y: auto; overflow-x: visible; background-color: rgba(255, 255, 255, .9);
+				}
+				.treeBar-resize {
+					position: absolute; /*cursor: col-resize;*/ width: 5px; left: -2px; top: 0; bottom: 0;
+				}
+				.treeBar-btn {
+					box-sizing: border-box; position: absolute; top: -1px; left: -1px; width: 72px; height: 28px;
+					padding: 0; border: 1px solid #ddd; border-radius: 3px; box-shadow: 0 1px 1px 1px #ddd;
+					font-size: 14px; background-color: #fff; vertical-align: middle; text-align: center;
+					outline: none; cursor: pointer; color: #333;
+				}
+				.treeBar > ul {
+					padding: 30px 10px 10px 25px;
+				}
+				.treeBar > ul > li a {
+					line-height: 30px; /*overflow: hidden; white-space: nowrap; text-overflow: ellipsis;*/
+					text-decoration: none; font-size: 14px; cursor: pointer; color: #0371e9;
+				}
+				.treeBar > ul > li a:hover {
+					text-decoration: underline;
+				}
+			/* slideToggle */
+				.treeBar-slide { overflow-y: visible; }
+				.treeBar-slide .treeBar-btn { left: -71px; top: -1px; }
+				.treeBar-slide > ul { display: none; }`,
 		innerDom: `<button class="treeBar-btn">TreeBar</button><div class="treeBar-resize"></div>`,
 		matchSite: function() {/* 匹配站点 */
 			var domain = location.href.match(/([\d\w]+)\.(com|cn|net|org|im|io|cc)/i);
