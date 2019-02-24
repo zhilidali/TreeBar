@@ -8,16 +8,16 @@
 // @author       zhilidali
 // @mail         zhilidali@qq.com
 // @license      MIT Licensed
-// @match        http*://www.jianshu.com/p/*
-// @match        http*://cdn2.jianshu.io/p/*
-// @match        http*://juejin.im/post/*
-// @match        http*://juejin.im/entry/*
-// @match        http*://sspai.com/*
-// @match        http*://zhuanlan.zhihu.com/p/*
-// @match        http*://mp.weixin.qq.com/s?*
-// @match        http*://cnodejs.org/topic/*
-// @match        http*://div.io/topic/*
-// @match        http*://www.zcfy.cc/article/*
+// @match        *://www.jianshu.com/p/*
+// @match        *://cdn2.jianshu.io/p/*
+// @match        *://juejin.im/post/*
+// @match        *://juejin.im/entry/*
+// @match        *://sspai.com/*
+// @match        *://zhuanlan.zhihu.com/p/*
+// @match        *://mp.weixin.qq.com/s?*
+// @match        *://cnodejs.org/topic/*
+// @match        *://div.io/topic/*
+// @match        *://www.zcfy.cc/article/*
 // @grant        none
 // ==/UserScript==
 
