@@ -2,7 +2,7 @@
 // @name         TreeBar
 // @name:zh-CN   目录树导航
 // @namespace    https://github.com/zhilidali/TreeBar/
-// @version      0.1.9
+// @version      0.1.10
 // @description  目录树导航 - 显示文章目录大纲导航
 // @description:zh-cn    目录树导航 - 显示文章目录大纲导航
 // @author       zhilidali
@@ -36,7 +36,7 @@
 			tagName: '.Post-RichText',
 		},
 		sspai: {
-			tagName: '#article-content',
+			tagName: '.notion-page-content',
 		},
 		juejin: {
 			tagName: '.article-content',
