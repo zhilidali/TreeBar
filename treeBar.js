@@ -2,7 +2,7 @@
 // @name         TreeBar
 // @name:zh-CN   目录树导航
 // @namespace    https://github.com/zhilidali/TreeBar/
-// @version      0.1.10
+// @version      0.1.11
 // @description  目录树导航 - 显示文章目录大纲导航
 // @description:zh-cn    目录树导航 - 显示文章目录大纲导航
 // @author       zhilidali
@@ -26,7 +26,7 @@
 
 	var map = {
 		jianshu: {
-			tagName: '.show-content',
+			tagName: '.ouvJEz',
 			style: {
 				top: '55px',
 				color: '#ea6f5a',
